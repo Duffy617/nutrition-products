@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="廖誼青博士 精準營養學研究室｜臨床營養品營養標示速查">
+<link rel="icon" href="logo.png">
+<title>臨床營養品速查</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: a clinical reference card — header band, sticky filter bar, dense scannable rows, sheets for detail and comparison */
+:root{
+  /* 白底＋灰階＋鼠色系（藍鼠、茶鼠），單一淺色主題 */
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#2A2B2D; --muted:#7A7C80; --line:#E2E2E0; --soft:#F4F4F3;
+  --accent:#56697A; --accent-ink:#FFFFFF; --accent-soft:#ECEFF2;
+  --chan:#7D6C5A; --chan-bg:#F2EEE9; --star:#7D6C5A;
+  --f-body:"Noto Sans TC","PingFang TC","Heiti TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-disp:var(--f-body);
+  --f-num:var(--f-body);
+  --r:10px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+
+/* header */
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand img{width:auto;height:64px;flex:none}
+footer .brand img{height:32px}
+header.top .wrap{padding-block:14px 12px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 20px}
+.lab{font-family:var(--f-disp);font-weight:700;font-size:13px;letter-spacing:.12em;color:var(--accent)}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(22px,4.6vw,30px);line-height:1.2;margin:2px 0 0;text-wrap:balance}
+.meta{color:var(--muted);font-size:13px}
+
+/* toolbar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:10px;display:grid;gap:8px}
+.search{position:relative}
+.search input{width:100%;height:44px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0 40px 0 14px;font-size:16px}
+.search input::placeholder{color:var(--muted)}
+.search button{position:absolute;right:4px;top:4px;width:36px;height:36px;border:0;background:none;color:var(--muted);font-size:20px;border-radius:8px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--line);background:var(--surface);font-size:13.5px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+.chip .c{font-family:var(--f-num);font-size:11.5px;opacity:.75;margin-left:4px}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;height:32px;padding:0 10px;font-size:13px;white-space:nowrap}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
+select{height:34px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:0 8px;font-size:13px;max-width:100%}
+.lbl{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+/* list */
+main .wrap{padding-block:12px 120px}
+.count{font-size:13px;color:var(--muted);margin:2px 0 10px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.list{display:grid;gap:8px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;padding:12px 12px 12px 14px;cursor:pointer}
+.item:hover{border-color:var(--accent)}
+.item.nolabel{opacity:.72}
+.nm{font-weight:700;font-size:15.5px;line-height:1.35}
+.sub{font-size:12.5px;color:var(--muted);margin-top:2px;display:flex;flex-wrap:wrap;gap:2px 10px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:11.5px;padding:1px 7px;border-radius:5px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.tag.ch{background:var(--chan-bg);color:var(--chan);font-weight:500}
+.acts{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.ib{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:16px;line-height:1;display:grid;place-items:center;color:var(--muted)}
+.ib[aria-pressed="true"]{color:var(--star);border-color:var(--star)}
+.ib.cmp[aria-pressed="true"]{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.kv{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;border-top:1px dashed var(--line);padding-top:8px}
+.kv div{min-width:0}
+.kv .k{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.kv .v{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:14.5px;font-weight:600}
+.kv .u{font-size:10.5px;color:var(--muted);margin-left:2px;font-family:var(--f-body);font-weight:400}
+@media (max-width:560px){.kv{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:6px}}
+.empty{padding:40px 8px;text-align:center;color:var(--muted)}
+details.miss{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.miss summary{padding:12px 14px;cursor:pointer;font-weight:500}
+details.miss ul{margin:0;padding:0 14px 14px 32px;font-size:13.5px;color:var(--muted)}
+details.miss li{margin:3px 0}
+details.miss b{color:var(--ink);font-weight:500}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+footer .wrap{padding-block:18px 28px;display:grid;gap:6px}
+footer .lab{font-size:12px}
+
+/* compare tray */
+.tray{position:fixed;left:0;right:0;bottom:0;z-index:25;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tray .wrap{padding-block:10px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.tray .names{font-size:13px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;white-space:nowrap}
+.btn.ghost{background:none;color:var(--accent)}
+
+/* sheets */
+dialog{border:0;padding:0;background:var(--surface);color:var(--ink);width:min(880px,100%);max-width:100%;max-height:92dvh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+dialog::backdrop{background:rgba(8,20,18,.5)}
+@media (max-width:640px){dialog{margin:auto 0 0;width:100%;border-radius:14px 14px 0 0;max-height:94dvh}}
+.sh{display:flex;flex-direction:column;max-height:inherit}
+.sh-h{padding:16px 16px 12px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.sh-h .t{flex:1;min-width:0}
+.sh-h h2{font-size:18px;margin:0;line-height:1.35;text-wrap:balance}
+.x{flex:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:18px;color:var(--muted)}
+.sh-b{overflow:auto;padding:14px 16px 24px;padding-bottom:max(24px,env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 16px;font-size:13.5px}
+.facts .k{color:var(--muted);font-size:12px}
+.calc{background:var(--soft);border-radius:var(--r);padding:12px;display:grid;gap:10px}
+.calc .r{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.step button{width:36px;height:36px;border:0;background:none;font-size:18px}
+.step input{width:56px;height:36px;border:0;border-inline:1px solid var(--line);text-align:center;background:none;font-family:var(--f-num)}
+.calc .sum{font-size:14px}
+.calc .sum b{font-family:var(--f-num);font-size:16px}
+.tin{width:80px;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:0 8px;font-family:var(--f-num)}
+.need{font-size:13.5px;color:var(--muted)}
+.need b{color:var(--accent);font-family:var(--f-num)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);white-space:normal;min-width:7.5em}
+thead th{font-size:12px;color:var(--muted);font-weight:500;background:var(--surface);position:sticky;top:0;z-index:1}
+thead th:first-child{z-index:2}
+td.n{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+tr.hi td{background:var(--accent-soft)}
+tr.hi td:first-child{background:var(--accent-soft)}
+td .u{color:var(--muted);font-size:11px;margin-left:3px;font-family:var(--f-body)}
+.cmp-h th{white-space:normal;min-width:9em;vertical-align:bottom;text-align:right;color:var(--ink);font-weight:700;font-size:12.5px}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.note.ch{border-color:var(--chan);color:var(--ink)}
+a{color:var(--accent)}
+.src a{word-break:break-all;font-size:12.5px}
+.loading{padding:48px 8px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.item{transition:border-color .12s}}
+
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+img{max-width:100%}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <img src="logo.png" alt="廖誼青博士精準營養學研究室 標誌">
+    <div>
+      <div class="lab">廖誼青博士　精準營養學研究室</div>
+      <h1>臨床營養品速查</h1>
+    </div>
+  </div>
+  <div class="meta" id="meta">載入中…</div>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <div class="search">
+    <input id="q" type="search" placeholder="搜尋品名、品牌、清單編號" autocomplete="off" aria-label="搜尋">
+    <button id="qx" type="button" aria-label="清除搜尋" hidden>×</button>
+  </div>
+  <div class="chips" id="groups" role="group" aria-label="類別"></div>
+</div></div>
+
+<main><div class="wrap">
+  <div class="row2" style="margin-bottom:10px">
+    <div class="seg" id="basis" role="group" aria-label="數值基準">
+      <button type="button" data-v="serv" aria-pressed="true">每份</button>
+      <button type="button" data-v="100" aria-pressed="false">每100 mL/g</button>
+      <button type="button" data-v="kcal" aria-pressed="false">每100大卡</button>
+    </div>
+    <div class="seg" id="form" role="group" aria-label="劑型">
+      <button type="button" data-v="全部" aria-pressed="true">全部</button>
+      <button type="button" data-v="液體" aria-pressed="false">液體</button>
+      <button type="button" data-v="粉狀" aria-pressed="false">粉狀</button>
+    </div>
+    <select id="sort" aria-label="排序">
+      <option value="name">排序：品名</option>
+      <option value="kcal-d">熱量 高→低</option>
+      <option value="pro-d">蛋白質 高→低</option>
+      <option value="pe-d">蛋白質熱量比 高→低</option>
+      <option value="na-a">鈉 低→高</option>
+      <option value="k-a">鉀 低→高</option>
+      <option value="p-a">磷 低→高</option>
+      <option value="sug-a">糖 低→高</option>
+      <option value="fib-d">膳食纖維 高→低</option>
+    </select>
+    <select id="src" aria-label="資料來源">
+      <option value="全部">來源：全部</option>
+      <option value="官網">只看官網資料</option>
+      <option value="通路">只看通路資料</option>
+    </select>
+    <button type="button" class="chip" id="favOnly" aria-pressed="false">★ 常用</button>
+  </div>
+  <div class="count"><span id="count"></span><span id="basisNote"></span></div>
+  <div class="list" id="list"><div class="loading">正在載入營養品資料…</div></div>
+  <details class="miss" id="miss" hidden><summary id="missSum"></summary><ul id="missList"></ul></details>
+</div></main>
+
+<footer><div class="wrap">
+  <div class="brand"><img src="logo.png" alt=""><div class="lab">廖誼青博士　精準營養學研究室</div></div>
+  <div>資料來自各廠商官網的營養標示。官網查不到的，改用 momo／PChome 商品頁的標示圖，並以黃色「通路」標籤註明。標示圖為人工判讀轉錄，臨床使用前請以產品包裝最新標示為準。</div>
+  <div>品項範圍：115年度商業配方分組清單所列廠商。</div>
+</div></footer>
+
+<div class="tray" id="tray" hidden><div class="wrap">
+  <div class="names" id="trayNames"></div>
+  <div style="display:flex;gap:8px;flex:none">
+    <button type="button" class="btn ghost" id="trayClear">清除</button>
+    <button type="button" class="btn" id="trayGo">比較</button>
+  </div>
+</div></div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle"><div class="sh" id="dlgBody"></div></dialog>
+<dialog id="cmpDlg" aria-labelledby="cmpTitle"><div class="sh" id="cmpBody"></div></dialog>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const GROUPS=['全部','一般均衡','糖尿病／血糖','腎臟病','癌症／手術','蛋白質補充','單素／元素／特殊','肺部疾病','嬰幼兒／兒童','其他補充品'];
+const S={data:null,q:'',group:'全部',form:'全部',src:'全部',sort:'name',basis:'serv',favOnly:false,cmp:[],favs:new Set(),serv:1};
+try{const f=JSON.parse(localStorage.getItem('np-favs')||'[]');f.forEach(x=>S.favs.add(x))}catch(e){}
+try{const b=localStorage.getItem('np-basis');if(b)S.basis=b}catch(e){}
+const saveFavs=()=>{try{localStorage.setItem('np-favs',JSON.stringify([...S.favs]))}catch(e){}};
+
+function parse(v){if(!v)return null;const m=String(v).match(/^([\d.]+)(x10\^\d+)?\s*(.*)$/);if(!m)return {raw:v};
+  if(m[2])return {raw:v};return {n:parseFloat(m[1]),u:m[3]||''}}
+const FAC={'公克':1e6,'毫克':1e3,'微克':1};
+function inUnit(pv,target){if(!pv||pv.n==null)return null;if(!target||pv.u===target)return pv.n;
+  const a=FAC[pv.u],b=FAC[target];return a&&b?pv.n*a/b:null}
+function fmt(n){if(n==null||isNaN(n))return '';const a=Math.abs(n);
+  const d=a>=100?0:a>=10?1:a>=1?2:3;return String(+n.toFixed(d))}
+function row(p,name){return p.rows.find(r=>r[0]===name)}
+function kcalOf(p){const r=row(p,'熱量');return r?parse(r[1]):null}
+// value of a nutrient on a basis -> {n,u} or {raw}
+function val(p,name,basis){const r=row(p,name);if(!r)return null;
+  if(basis==='serv')return parse(r[1]);
+  if(basis==='100')return parse(r[2]);
+  const a=parse(r[1]),k=kcalOf(p);if(!a||a.n==null||!k||!k.n)return a&&a.raw?a:null;
+  if(name==='熱量')return {n:100,u:a.u};return {n:a.n/k.n*100,u:a.u}}
+function num(p,name,basis,unit){return inUnit(val(p,name,basis),unit)}
+function pe(p){const k=num(p,'熱量','serv'),pr=num(p,'蛋白質','serv','公克');return k&&pr!=null?pr*4/k*100:null}
+const per100=p=>p.form==='粉狀'?'每100 g':'每100 mL';
+const KEYS=[['熱量','熱量','大卡'],['蛋白質','蛋白質','公克'],['PE','蛋白質熱量比','%'],['鈉','鈉','毫克'],['鉀','鉀','毫克'],['磷','磷','毫克']];
+const UNIT_SHORT={'大卡':'kcal','公克':'g','毫克':'mg','微克':'µg','%':'%'};
+
+function filtered(){const q=S.q.trim().toLowerCase().replace(/\s+/g,'');
+  let L=S.data.products.filter(p=>{
+    if(S.group!=='全部'&&p.group!==S.group)return false;
+    if(S.form!=='全部'&&p.form!==S.form)return false;
+    if(S.src!=='全部'&&p.src!==S.src)return false;
+    if(S.favOnly&&!S.favs.has(p.id))return false;
+    if(q){const h=(p.name+p.series+p.brand+p.company+p.cat+p.listno).toLowerCase().replace(/\s+/g,'');if(!h.includes(q))return false}
+    return true});
+  const b=S.basis,srt=S.sort;
+  const key={'kcal-d':p=>num(p,'熱量',b),'pro-d':p=>num(p,'蛋白質',b,'公克'),'pe-d':pe,'na-a':p=>num(p,'鈉',b,'毫克'),
+    'k-a':p=>num(p,'鉀',b,'毫克'),'p-a':p=>num(p,'磷',b,'毫克'),'sug-a':p=>num(p,'糖',b,'公克'),'fib-d':p=>num(p,'膳食纖維',b,'公克')}[srt];
+  if(key){const asc=srt.endsWith('-a');L=L.map(p=>[p,key(p)]).sort((x,y)=>{
+      if(x[1]==null&&y[1]==null)return 0;if(x[1]==null)return 1;if(y[1]==null)return -1;return asc?x[1]-y[1]:y[1]-x[1]}).map(x=>x[0])}
+  else L=L.slice().sort((a,b)=>(a.rows.length?0:1)-(b.rows.length?0:1)||a.brand.localeCompare(b.brand,'zh-Hant')||a.name.localeCompare(b.name,'zh-Hant'));
+  return L}
+
+function keyCell(p,k){let v,u=k[2];
+  if(k[0]==='PE'){v=pe(p)}else{v=num(p,k[1],S.basis,u)}
+  return `<div><div class="k">${k[1]==='蛋白質熱量比'?'蛋白質%':k[1]}</div><div class="v">${v==null?'—':fmt(v)}${v==null?'':`<span class="u">${UNIT_SHORT[u]}</span>`}</div></div>`}
+
+function render(){if(!S.data)return;
+  const L=filtered();
+  $('#count').textContent=`${L.length} 項`+(S.q?`（搜尋「${S.q}」）`:'');
+  $('#basisNote').textContent={serv:'數值：每份',100:'數值：每100 mL（液）／g（粉）',kcal:'數值：每100大卡'}[S.basis];
+  const list=$('#list');
+  if(!L.length){list.innerHTML=`<div class="empty">沒有符合的品項。試試縮短關鍵字，或把類別切回「全部」。</div>`}
+  else list.innerHTML=L.map(p=>{const fav=S.favs.has(p.id),c=S.cmp.includes(p.id);
+    return `<article class="item${p.rows.length?'':' nolabel'}" data-id="${p.id}">
+      <div style="min-width:0"><div class="nm">${esc(p.name)}</div>
+        <div class="sub"><span>${esc(p.brand)}</span>${p.serving?`<span>每份 ${esc(p.serving)}</span>`:''}${p.listno?`<span>清單 ${esc(p.listno)}</span>`:''}</div>
+        <div class="tags"><span class="tag">${esc(p.group)}</span>${p.form?`<span class="tag">${p.form}</span>`:''}${p.src==='通路'?`<span class="tag ch">通路資料</span>`:''}${p.rows.length?'':'<span class="tag">官網未公開標示</span>'}</div></div>
+      <div class="acts"><button type="button" class="ib fav" aria-pressed="${fav}" aria-label="加入常用" title="常用">${fav?'★':'☆'}</button>
+        ${p.rows.length?`<button type="button" class="ib cmp" aria-pressed="${c}" aria-label="加入比較" title="比較">⇄</button>`:''}</div>
+      ${p.rows.length?`<div class="kv">${KEYS.map(k=>keyCell(p,k)).join('')}</div>`:''}
+    </article>`}).join('');
+  // missing list
+  const q=S.q.trim().toLowerCase();const M=S.data.missing.filter(m=>!q||(m.brand+m.text).toLowerCase().includes(q));
+  const md=$('#miss');md.hidden=!M.length||S.favOnly;
+  $('#missSum').textContent=`清單中查無公開營養標示的品項（${M.length}）`;
+  $('#missList').innerHTML=M.map(m=>`<li><b>${esc(m.brand)}</b>　${esc(m.text)}</li>`).join('');
+  if(q&&M.length&&!L.length)md.open=true;
+  renderTray()}
+
+function renderTray(){const t=$('#tray');t.hidden=!S.cmp.length;
+  const ps=S.cmp.map(id=>S.data.products.find(p=>p.id===id));
+  $('#trayNames').textContent=`已選 ${ps.length}／4：`+ps.map(p=>p.name).join('、');
+  $('#trayGo').disabled=ps.length<2;$('#trayGo').style.opacity=ps.length<2?.5:1}
+
+function chips(){const cnt={};S.data.products.forEach(p=>cnt[p.group]=(cnt[p.group]||0)+1);
+  $('#groups').innerHTML=GROUPS.filter(g=>g==='全部'||cnt[g]).map(g=>`<button type="button" class="chip" data-g="${g}" aria-pressed="${S.group===g}">${g}<span class="c">${g==='全部'?S.data.products.length:cnt[g]}</span></button>`).join('')}
+
+function setSeg(id,v){document.querySelectorAll(id+' button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v))}
+
+/* ---------- detail ---------- */
+function openDetail(id){const p=S.data.products.find(x=>x.id===id);if(!p)return;S.serv=1;
+  const d=$('#dlg');drawDetail(p);if(!d.open)d.showModal();
+  try{if(location.hash!=='#'+id)history.replaceState(null,'','#'+id)}catch(e){}}
+function drawDetail(p){const n=S.serv;const k=kcalOf(p),pr=row(p,'蛋白質')?parse(row(p,'蛋白質')[1]):null;
+  const body=$('#dlgBody');
+  const rowsHtml=p.rows.map(r=>{const a=parse(r[1]),b=parse(r[2]);const hi=['熱量','蛋白質','鈉','鉀','磷'].includes(r[0]);
+    const cell=v=>!v?'<td class="n">—</td>':v.raw?`<td class="n">${esc(v.raw)}</td>`:`<td class="n">${fmt(v.n)}<span class="u">${esc(v.u)}</span></td>`;
+    const tot=a&&a.n!=null?{n:a.n*n,u:a.u}:a;
+    return `<tr${hi?' class="hi"':''}><td>${esc(r[0])}</td>${cell(a)}${cell(b)}${n!==1?cell(tot):''}</tr>`}).join('');
+  const ch=p.src==='通路';
+  body.innerHTML=`<div class="sh-h"><div class="t"><div class="lbl">${esc(p.brand)}${p.listno?'　·　清單 '+esc(p.listno):''}</div><h2 id="dlgTitle">${esc(p.name)}</h2>
+      <div class="tags"><span class="tag">${esc(p.cat)}</span>${p.form?`<span class="tag">${p.form}</span>`:''}${ch?'<span class="tag ch">通路資料（官網查無）</span>':'<span class="tag">官網資料</span>'}</div></div>
+      <button type="button" class="ib fav" data-id="${p.id}" aria-pressed="${S.favs.has(p.id)}" aria-label="加入常用">${S.favs.has(p.id)?'★':'☆'}</button>
+      <button type="button" class="x" data-close aria-label="關閉">×</button></div>
+    <div class="sh-b">
+      <div class="facts">
+        <div><div class="k">每份量</div>${esc(p.serving||'—')}</div>
+        <div><div class="k">包裝</div>${esc(p.pack||'—')}</div>
+        <div><div class="k">蛋白質熱量比</div><span class="num">${pe(p)==null?'—':fmt(pe(p))+'%'}</span></div>
+        <div><div class="k">廠商</div>${esc(p.company)}</div>
+      </div>
+      ${p.rows.length&&k&&k.n?`<div class="calc">
+        <div class="r"><span class="lbl">份數</span>
+          <span class="step"><button type="button" data-step="-0.5" aria-label="減半份">−</button><input id="servN" inputmode="decimal" value="${n}" aria-label="份數"><button type="button" data-step="0.5" aria-label="加半份">+</button></span>
+          <span class="sum"><b>${fmt(k.n*n)}</b> 大卡　<b>${pr&&pr.n!=null?fmt(pr.n*n):'—'}</b> ${esc(pr?pr.u:'')}蛋白質</span></div>
+        <div class="r"><span class="lbl">目標</span>
+          <input class="tin" id="tK" inputmode="decimal" placeholder="熱量" aria-label="目標熱量（大卡）"> 大卡
+          <input class="tin" id="tP" inputmode="decimal" placeholder="蛋白質" aria-label="目標蛋白質（公克）"> g
+          <span class="need" id="need">輸入目標，算出需要幾份</span></div>
+      </div>`:''}
+      ${p.rows.length?`<div class="tbl"><table><thead><tr><th>營養素</th><th>每份</th><th>${per100(p)}</th>${n!==1?`<th>× ${fmt(n)} 份</th>`:''}</tr></thead><tbody>${rowsHtml}</tbody></table></div>`
+        :`<div class="note">官網未公開這項產品的營養標示，通路也查不到。請以包裝標示為準。</div>`}
+      ${p.note?`<div class="note${ch?' ch':''}">${esc(p.note)}</div>`:''}
+      <div class="src"><span class="lbl">資料來源　</span>${/^https?:/.test(p.url)?`<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`:esc(p.url)}</div>
+    </div>`;
+  body.dataset.id=p.id}
+function updNeed(p){const k=kcalOf(p),r=row(p,'蛋白質'),pr=r?parse(r[1]):null;
+  const tk=parseFloat($('#tK')?.value),tp=parseFloat($('#tP')?.value);const out=[];
+  if(tk>0&&k&&k.n)out.push(`熱量需 <b>${fmt(tk/k.n)}</b> 份`);
+  if(tp>0&&pr&&pr.n)out.push(`蛋白質需 <b>${fmt(tp/inUnit(pr,'公克'))}</b> 份`);
+  $('#need').innerHTML=out.length?out.join('　'):'輸入目標，算出需要幾份'}
+
+/* ---------- compare ---------- */
+let cmpBasis='serv';
+function drawCompare(){const ps=S.cmp.map(id=>S.data.products.find(p=>p.id===id));
+  const names=[];ps.forEach(p=>p.rows.forEach(r=>{if(!names.includes(r[0]))names.push(r[0])}));
+  const head=`<tr class="cmp-h"><th>營養素</th>${ps.map(p=>`<th>${esc(p.name)}<div class="lbl" style="font-weight:400">${esc(p.brand)}${p.src==='通路'?'・通路':''}</div></th>`).join('')}</tr>`;
+  const sv=`<tr><td>每份量</td>${ps.map(p=>`<td>${esc(p.serving||'—')}</td>`).join('')}</tr><tr><td>蛋白質熱量比</td>${ps.map(p=>`<td class="n">${pe(p)==null?'—':fmt(pe(p))+'%'}</td>`).join('')}</tr>`;
+  const body=names.map(n=>{const hi=['熱量','蛋白質','鈉','鉀','磷'].includes(n);
+    const target=(ps.map(p=>val(p,n,cmpBasis)).find(v=>v&&v.u)||{}).u;
+    return `<tr${hi?' class="hi"':''}><td>${esc(n)}</td>${ps.map(p=>{const v=val(p,n,cmpBasis);if(!v)return '<td class="n">—</td>';if(v.raw)return `<td class="n">${esc(v.raw)}</td>`;
+      const c=inUnit(v,target);return c==null?`<td class="n">${fmt(v.n)}<span class="u">${esc(v.u)}</span></td>`:`<td class="n">${fmt(c)}<span class="u">${esc(target)}</span></td>`}).join('')}</tr>`}).join('');
+  $('#cmpBody').innerHTML=`<div class="sh-h"><div class="t"><div class="lbl">並排比較 ${ps.length} 項</div><h2 id="cmpTitle">營養素比較</h2>
+      <div class="seg" id="cmpBasis" style="margin-top:8px"><button type="button" data-v="serv" aria-pressed="${cmpBasis==='serv'}">每份</button><button type="button" data-v="100" aria-pressed="${cmpBasis==='100'}">每100 mL/g</button><button type="button" data-v="kcal" aria-pressed="${cmpBasis==='kcal'}">每100大卡</button></div></div>
+      <button type="button" class="x" data-close aria-label="關閉">×</button></div>
+    <div class="sh-b"><div class="tbl"><table><thead>${head}</thead><tbody>${sv}${body}</tbody></table></div>
+    <div class="note">「每100大卡」以每份數值除以每份熱量換算，適合比較不同熱量密度的產品。</div></div>`}
+
+/* ---------- events ---------- */
+let qt;$('#q').addEventListener('input',e=>{S.q=e.target.value;$('#qx').hidden=!S.q;clearTimeout(qt);qt=setTimeout(render,120)});
+$('#qx').addEventListener('click',()=>{$('#q').value='';S.q='';$('#qx').hidden=true;render();$('#q').focus()});
+$('#groups').addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;S.group=b.dataset.g;chips();render()});
+$('#basis').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;S.basis=b.dataset.v;setSeg('#basis',S.basis);try{localStorage.setItem('np-basis',S.basis)}catch(x){}render()});
+$('#form').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;S.form=b.dataset.v;setSeg('#form',S.form);render()});
+$('#sort').addEventListener('change',e=>{S.sort=e.target.value;render()});
+$('#src').addEventListener('change',e=>{S.src=e.target.value;render()});
+$('#favOnly').addEventListener('click',e=>{S.favOnly=!S.favOnly;e.currentTarget.setAttribute('aria-pressed',S.favOnly);render()});
+function toggleFav(id){S.favs.has(id)?S.favs.delete(id):S.favs.add(id);saveFavs()}
+$('#list').addEventListener('click',e=>{const it=e.target.closest('.item');if(!it)return;const id=it.dataset.id;
+  if(e.target.closest('.fav')){toggleFav(id);render();return}
+  if(e.target.closest('.cmp')){const i=S.cmp.indexOf(id);if(i>=0)S.cmp.splice(i,1);else{if(S.cmp.length>=4)S.cmp.shift();S.cmp.push(id)}render();return}
+  openDetail(id)});
+$('#dlg').addEventListener('click',e=>{const d=$('#dlg');
+  if(e.target===d||e.target.closest('[data-close]')){d.close();return}
+  const p=S.data.products.find(x=>x.id===$('#dlgBody').dataset.id);
+  if(e.target.closest('.fav')){toggleFav(p.id);drawDetail(p);render();return}
+  const st=e.target.closest('[data-step]');if(st){S.serv=Math.max(0.5,+(S.serv+parseFloat(st.dataset.step)).toFixed(2));const tk=$('#tK').value,tp=$('#tP').value;drawDetail(p);$('#tK').value=tk;$('#tP').value=tp;updNeed(p)}});
+$('#dlg').addEventListener('change',e=>{if(e.target.id!=='servN')return;const p=S.data.products.find(x=>x.id===$('#dlgBody').dataset.id);
+  const v=parseFloat(e.target.value);S.serv=v>0?v:1;const tk=$('#tK').value,tp=$('#tP').value;drawDetail(p);$('#tK').value=tk;$('#tP').value=tp;updNeed(p)});
+$('#dlg').addEventListener('input',e=>{if(e.target.id==='tK'||e.target.id==='tP')updNeed(S.data.products.find(x=>x.id===$('#dlgBody').dataset.id))});
+$('#dlg').addEventListener('close',()=>{try{if(location.hash)history.replaceState(null,'',location.pathname+location.search)}catch(e){}});
+$('#trayClear').addEventListener('click',()=>{S.cmp=[];render()});
+$('#trayGo').addEventListener('click',()=>{if(S.cmp.length<2)return;drawCompare();$('#cmpDlg').showModal()});
+$('#cmpDlg').addEventListener('click',e=>{const d=$('#cmpDlg');if(e.target===d||e.target.closest('[data-close]')){d.close();return}
+  const b=e.target.closest('#cmpBasis [data-v]');if(b){cmpBasis=b.dataset.v;drawCompare()}});
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(/^p\d+$/.test(h)&&S.data)openDetail(h)});
+
+setSeg('#basis',S.basis);
+fetch('products.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(d=>{
+  S.data=d;$('#meta').innerHTML=`<span class="num">${d.products.filter(p=>p.rows.length).length}</span> 項有營養標示　·　資料更新 <span class="num">${d.updated}</span>`;
+  chips();render();const h=location.hash.slice(1);if(/^p\d+$/.test(h))openDetail(h)})
+.catch(()=>{$('#list').innerHTML='<div class="empty">營養品資料載入失敗。請重新整理頁面；若仍失敗，請通知研究室。</div>';$('#meta').textContent=''});
+})();
+</script>
+
+</body>
+</html>
