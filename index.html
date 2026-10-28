@@ -160,7 +160,7 @@ img{max-width:100%}
 
 <div class="bar"><div class="wrap">
   <div class="search">
-    <input id="q" type="search" placeholder="搜尋品名、品牌、清單編號" autocomplete="off" aria-label="搜尋">
+    <input id="q" type="search" placeholder="搜尋品名、品牌" autocomplete="off" aria-label="搜尋">
     <button id="qx" type="button" aria-label="清除搜尋" hidden>×</button>
   </div>
   <div class="chips" id="groups" role="group" aria-label="類別"></div>
@@ -255,7 +255,7 @@ function filtered(){const q=S.q.trim().toLowerCase().replace(/\s+/g,'');
     if(S.form!=='全部'&&p.form!==S.form)return false;
     if(S.src!=='全部'&&p.src!==S.src)return false;
     if(S.favOnly&&!S.favs.has(p.id))return false;
-    if(q){const h=(p.name+p.series+p.brand+p.company+p.cat+p.listno).toLowerCase().replace(/\s+/g,'');if(!h.includes(q))return false}
+    if(q){const h=(p.name+p.series+p.brand+p.company+p.cat).toLowerCase().replace(/\s+/g,'');if(!h.includes(q))return false}
     return true});
   const b=S.basis,srt=S.sort;
   const key={'kcal-d':p=>num(p,'熱量',b),'pro-d':p=>num(p,'蛋白質',b,'公克'),'pe-d':pe,'na-a':p=>num(p,'鈉',b,'毫克'),
@@ -278,7 +278,7 @@ function render(){if(!S.data)return;
   else list.innerHTML=L.map(p=>{const fav=S.favs.has(p.id),c=S.cmp.includes(p.id);
     return `<article class="item${p.rows.length?'':' nolabel'}" data-id="${p.id}">
       <div style="min-width:0"><div class="nm">${esc(p.name)}</div>
-        <div class="sub"><span>${esc(p.brand)}</span>${p.serving?`<span>每份 ${esc(p.serving)}</span>`:''}${p.listno?`<span>清單 ${esc(p.listno)}</span>`:''}</div>
+        <div class="sub"><span>${esc(p.brand)}</span>${p.serving?`<span>每份 ${esc(p.serving)}</span>`:''}</div>
         <div class="tags"><span class="tag">${esc(p.group)}</span>${p.form?`<span class="tag">${p.form}</span>`:''}${p.src==='通路'?`<span class="tag ch">通路資料</span>`:''}${p.rows.length?'':'<span class="tag">官網未公開標示</span>'}</div></div>
       <div class="acts"><button type="button" class="ib fav" aria-pressed="${fav}" aria-label="加入常用" title="常用">${fav?'★':'☆'}</button>
         ${p.rows.length?`<button type="button" class="ib cmp" aria-pressed="${c}" aria-label="加入比較" title="比較">⇄</button>`:''}</div>
@@ -313,7 +313,7 @@ function drawDetail(p){const n=S.serv;const k=kcalOf(p),pr=row(p,'蛋白質')?pa
     const tot=a&&a.n!=null?{n:a.n*n,u:a.u}:a;
     return `<tr${hi?' class="hi"':''}><td>${esc(r[0])}</td>${cell(a)}${cell(b)}${n!==1?cell(tot):''}</tr>`}).join('');
   const ch=p.src==='通路';
-  body.innerHTML=`<div class="sh-h"><div class="t"><div class="lbl">${esc(p.brand)}${p.listno?'　·　清單 '+esc(p.listno):''}</div><h2 id="dlgTitle">${esc(p.name)}</h2>
+  body.innerHTML=`<div class="sh-h"><div class="t"><div class="lbl">${esc(p.brand)}</div><h2 id="dlgTitle">${esc(p.name)}</h2>
       <div class="tags"><span class="tag">${esc(p.cat)}</span>${p.form?`<span class="tag">${p.form}</span>`:''}${ch?'<span class="tag ch">通路資料（官網查無）</span>':'<span class="tag">官網資料</span>'}</div></div>
       <button type="button" class="ib fav" data-id="${p.id}" aria-pressed="${S.favs.has(p.id)}" aria-label="加入常用">${S.favs.has(p.id)?'★':'☆'}</button>
       <button type="button" class="x" data-close aria-label="關閉">×</button></div>
