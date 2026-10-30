@@ -198,13 +198,11 @@ img{max-width:100%}
   </div>
   <div class="count"><span id="count"></span><span id="basisNote"></span></div>
   <div class="list" id="list"><div class="loading">正在載入營養品資料…</div></div>
-  <details class="miss" id="miss" hidden><summary id="missSum"></summary><ul id="missList"></ul></details>
 </div></main>
 
 <footer><div class="wrap">
   <div class="brand"><img src="logo.png" alt=""><div class="lab">廖誼青博士　精準營養學研究室</div></div>
   <div>資料來自各廠商官網的營養標示。官網查不到的，改用 momo／PChome 商品頁的標示圖，並以黃色「通路」標籤註明。標示圖為人工判讀轉錄，臨床使用前請以產品包裝最新標示為準。</div>
-  <div>品項範圍：115年度商業配方分組清單所列廠商。</div>
 </div></footer>
 
 <div class="tray" id="tray" hidden><div class="wrap">
@@ -245,12 +243,13 @@ function val(p,name,basis){const r=row(p,name);if(!r)return null;
   if(name==='熱量')return {n:100,u:a.u};return {n:a.n/k.n*100,u:a.u}}
 function num(p,name,basis,unit){return inUnit(val(p,name,basis),unit)}
 function pe(p){const k=num(p,'熱量','serv'),pr=num(p,'蛋白質','serv','公克');return k&&pr!=null?pr*4/k*100:null}
-const per100=p=>p.form==='粉狀'?'每100 g':'每100 mL';
+const per100=p=>p.per100||(p.form==='粉狀'?'每100公克':'每100毫升');
 const KEYS=[['熱量','熱量','大卡'],['蛋白質','蛋白質','公克'],['PE','蛋白質熱量比','%'],['鈉','鈉','毫克'],['鉀','鉀','毫克'],['磷','磷','毫克']];
 const UNIT_SHORT={'大卡':'kcal','公克':'g','毫克':'mg','微克':'µg','%':'%'};
 
 function filtered(){const q=S.q.trim().toLowerCase().replace(/\s+/g,'');
   let L=S.data.products.filter(p=>{
+    if(!p.rows.length)return false;
     if(S.group!=='全部'&&p.group!==S.group)return false;
     if(S.form!=='全部'&&p.form!==S.form)return false;
     if(S.src!=='全部'&&p.src!==S.src)return false;
@@ -284,12 +283,6 @@ function render(){if(!S.data)return;
         ${p.rows.length?`<button type="button" class="ib cmp" aria-pressed="${c}" aria-label="加入比較" title="比較">⇄</button>`:''}</div>
       ${p.rows.length?`<div class="kv">${KEYS.map(k=>keyCell(p,k)).join('')}</div>`:''}
     </article>`}).join('');
-  // missing list
-  const q=S.q.trim().toLowerCase();const M=S.data.missing.filter(m=>!q||(m.brand+m.text).toLowerCase().includes(q));
-  const md=$('#miss');md.hidden=!M.length||S.favOnly;
-  $('#missSum').textContent=`清單中查無公開營養標示的品項（${M.length}）`;
-  $('#missList').innerHTML=M.map(m=>`<li><b>${esc(m.brand)}</b>　${esc(m.text)}</li>`).join('');
-  if(q&&M.length&&!L.length)md.open=true;
   renderTray()}
 
 function renderTray(){const t=$('#tray');t.hidden=!S.cmp.length;
@@ -329,7 +322,7 @@ function drawDetail(p){const n=S.serv;const k=kcalOf(p),pr=row(p,'蛋白質')?pa
           <span class="step"><button type="button" data-step="-0.5" aria-label="減半份">−</button><input id="servN" inputmode="decimal" value="${n}" aria-label="份數"><button type="button" data-step="0.5" aria-label="加半份">+</button></span>
           <span class="sum"><b>${fmt(k.n*n)}</b> 大卡　<b>${pr&&pr.n!=null?fmt(pr.n*n):'—'}</b> ${esc(pr?pr.u:'')}蛋白質</span></div>
         <div class="r"><span class="lbl">目標</span>
-          <input class="tin" id="tK" inputmode="decimal" placeholder="熱量" aria-label="目標熱量（大卡）"> 大卡
+          <input class="tin" id="tK" inputmode="decimal" placeholder="熱量" aria-label="目標熱量（大卡）"> 大卡　或
           <input class="tin" id="tP" inputmode="decimal" placeholder="蛋白質" aria-label="目標蛋白質（公克）"> g
           <span class="need" id="need">輸入目標，算出需要幾份</span></div>
       </div>`:''}
